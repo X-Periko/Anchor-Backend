@@ -1,0 +1,22 @@
+[project]
+name = "anchor-backend"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "Pablo Martínez Prado", email = "pablo.martinezprado@outlook.es" }
+]
+requires-python = ">=3.14"
+dependencies = [
+    "argon2-cffi>=25.1.0",
+    "fastapi>=0.141.1",
+    "pydantic>=2.13.5",
+    "pyjwt>=2.15.0",
+]
+
+[project.scripts]
+anchor-backend = "anchor_backend:main"
+
+[build-system]
+requires = ["uv_build>=0.12.16,<0.13.0"]
+build-backend = "uv_build"
