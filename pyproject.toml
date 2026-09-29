@@ -12,10 +12,13 @@ dependencies = [
     "fastapi>=0.141.1",
     "pydantic>=2.13.5",
     "pyjwt>=2.15.0",
+    "typer>=0.27.2",
+    "uvicorn>=0.54.0",
 ]
 
 [project.scripts]
 anchor-backend = "anchor_backend:main"
+admin = "anchor_backend.admin:app"
 
 [build-system]
 requires = ["uv_build>=0.12.16,<0.13.0"]

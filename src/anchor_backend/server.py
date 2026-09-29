@@ -2,11 +2,10 @@ from fastapi import *
 from pydantic import BaseModel
 from typing import Optional
 import sqlite3
-from . import task, database, security
+from . import database, security
 
 app = FastAPI()
 
-task_list = []
 database.create_table()
 
 @app.get("/health")
@@ -40,7 +39,9 @@ def login(data:Login):
     if not found:
         found = database.get_user_by_email(data.name)
     if not found:
-        raise HTTPException(401, detail="Invalid nick or password")
+        return {
+            "Succes": False,
+            "Details": "Invalid nick or password"}
     if security.verify_password(data.password, found.get("password_hash")):
         return {"Succes":True,
                 "acces_token": security.create_access_token(found.get("id")),
@@ -122,7 +123,7 @@ class EditTask(BaseModel):
 @app.post("/edit")
 def edit_task(task_param:EditTask, current_user: dict = Depends(security.get_current_user)):
     try:
-        id = int(task_param.task_id)
+        id = int(task_param.task_name)
     except:
         tasks_founded = database.find_tasks_by_name(user_id=current_user["id"], name=task_param.task_name)
         if len(tasks_founded) == 0:
@@ -136,7 +137,3 @@ def edit_task(task_param:EditTask, current_user: dict = Depends(security.get_cur
                        priority=task_param.priority,
                        user_id=current_user["id"])
     return "Task eddited with succes"
-
-@app.get("/users")
-def users_list():
-    return database.list_users()
